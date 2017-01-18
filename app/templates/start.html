@@ -14,37 +14,38 @@
     <form method="post" class="form-start">
       <h1>Start</h1>
 
-      <!-- Resource input -->
+      <!-- Username -->
       <div class="form-group">
-        <label for="pl_resource">Copy and paste playlist URI, URL, or ID here</label>
-        {% if error != '' %}
-          <div class="alert alert-danger" role="alert">{{error}}</div>
-        {% endif %}
-        <input type="text" class="form-control" name="pl_resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl_resource" autofocus required/>
-        <span id="idHelpBlock" class="help-block">Found by navigating to the playlist's page in Spotify, clicking the button with three dots, and selecting "Copy Playlist Link" or "Copy Playlist URI".</span>
+        <label for="username">Enter your Spotify username</label>
+        <input type="text" class="form-control" name="username" id="username">
       </div>
 
-      <!-- Scan day -->
-      <div class="form-group">
-        <label for="scan_day">Scan day</label>
-        <select name="scan_day" id="scan_day" class="form-control" aria-describedby="scanDayHelpBlock">
-          <option value="Sunday">Sunday</option>
-          <option value="Monday" selected>Monday</option>
-          <option value="Tuesday">Tuesday</option>
-          <option value="Wednesday">Wednesday</option>
-          <option value="Thursday">Thursday</option>
-          <option value="Friday">Friday</option>
-          <option value="Saturday">Saturday</option>
-        </select>
-        <span id="scanDayHelpBlock" class="help-block">This option sets which day of the week your playlist will be scanned.</span>
-      </div>
+      <!-- Playlist name -->
+      <!-- <div class="form-group">
+        <label for="playlist_name">Name your playlist</label>
+        {% if error.playlist_name %}
+          <div class="alert alert-danger" role="alert">{{error.playlist_name}}</div>
+        {% endif %}
+        <input type="text" class="form-control" name="playlist_name" placeholder="Broothie's playlist" id="playlist_name" autofocus required>
+      </div> -->
+
+      <!-- Resource -->
+      <!-- <div class="form-group">
+        <label for="pl_resource">Copy and paste playlist URI, URL, or ID here</label>
+        {% if error.resource %}
+          <div class="alert alert-danger" role="alert">{{error.resource}}</div>
+        {% endif %}
+        <input type="text" class="form-control" name="pl_resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl_resource" required/>
+        <span id="idHelpBlock" class="help-block">Navigate to the playlist's page in Spotify, click the button with three dots, and select "Copy Playlist Link" or "Copy Playlist URI".</span>
+      </div> -->
 
       <!-- Mobile number -->
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="mobile_number">Mobile number (optional)</label>
         <input type="text" class="form-control" name="mobile_number" placeholder="(123) 456-7890" id="mobile_number"/>
-      </div>
+      </div> -->
 
+      <!-- Submit button -->
       <input type="submit" class="btn btn-primary" value="Submit"/>
     </form>
   </div>

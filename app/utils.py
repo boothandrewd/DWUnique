@@ -2,7 +2,7 @@
 """
 import os
 import re
-from datetime import date
+from datetime import date, datetime
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials as spCreds
@@ -32,8 +32,21 @@ def update_scan_day(playlist_id, day_index):
 
 
 def get_history_set(playlist_id):
-    unique_playlists = pl_archives.find_one({'playlist_id': playlist_id}, ['unique_playlists']) or {}
+    unique_playlists = pl_archives.find_one({'playlist_id': playlist_id}, {
+        'unique_playlists': 1,
+        '_id': 0
+    })['unique_playlists'] or {}
     return set([ti for up in unique_playlists.values() for ti in up])
+
+
+def get_latest_unique_playlist(playlist_id):
+    unique_playlists = pl_archives.find_one({'playlist_id': playlist_id}, {
+        'unique_playlists': 1,
+        '_id': 0
+    })['unique_playlists'] or {}
+    latest_date = sorted(unique_playlists.keys(), key=lambda x: datetime.strptime(x, TIME_FORMAT), reverse=True)[0]
+    print(latest_date)
+    return unique_playlists[latest_date]
 
 
 def update_pl_archive(playlist_id):
@@ -48,33 +61,4 @@ def update_pl_archive(playlist_id):
     today_string = date.today().strftime(TIME_FORMAT)
     pl_archives.update_one({'playlist_id': playlist_id}, {
         '$set': {'unique_playlists.' + today_string: new_tracks}
-    })
-
-
-# def update_pl_archive(playlist_id):
-#     # Get database info
-#     db_track_list = pl_archives.find_one({'playlist_id': playlist_id}, ['track_list']) or []
-#     db_dwu_track_ids = pl_archives.find_one({'playlist_id': playlist_id}, ['dwu']) or []
-#
-#     # Get new track ids from playlist object
-#     pl = spotify.user_playlist('spotify', playlist_id)
-#     new_track_ids = set([item['track']['id'] for item in pl['tracks']['items']])
-#
-#     # Determine new DWU
-#     old_track_ids = set([track[0] for track in db_track_list])
-#     dwu_track_ids = list(new_track_ids - old_track_ids)
-#     # If new DWU is different from db, overwrite db
-#     if dwu_track_ids != db_dwu_track_ids:
-#         dwu_update = {'$set': {'dwu': dwu_track_ids}}
-#     else:
-#         dwu_update = {}
-#
-#     # Create track list
-#     today_string = date.today().strftime(TIME_FORMAT)
-#     track_list = []
-#     for dwu_track_id in dwu_track_ids:
-#         track_list.append((dwu_track_id, today_string))
-#     track_list_update = {'$addToSet': {'track_list': {'$each': track_list}}}
-#
-#     # Update database
-#     pl_archives.update_one({'playlist_id': playlist_id}, {**track_list_update, **dwu_update}, upsert=True)
+    }, upsert=True)
