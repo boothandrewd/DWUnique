@@ -1,0 +1,12 @@
+/* static/css/playlist.css
+*/
+
+iframe {
+  display: block;
+  margin 0 auto;
+}
+
+.song-list {
+  text-align: center;
+  /*margin: auto;*/
+}

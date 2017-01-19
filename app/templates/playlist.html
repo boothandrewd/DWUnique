@@ -10,14 +10,12 @@
   <title>Document</title>
 </head>
 <body>
-  <table>
-    <tbody>
+  <div class="container">
+    <div class="song-list">
       {% for track_id in playlist %}
-        <tr>
-          <iframe src="https://open.spotify.com/track/{{track_id}}" width="600" height="80" frameborder="0" allowtransparency="true"></iframe>
-        </tr>
+        <iframe src="https://embed.spotify.com/?uri=spotify:track:{{track_id}}" width="750" height="80" frameborder="0" allowtransparency="true" align="middle"></iframe>
       {% endfor %}
-    </tbody>
-  </table>
+    </div>
+  </div>
 </body>
 </html>
