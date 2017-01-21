@@ -4,28 +4,19 @@
   "scripts": {
   },
   "env": {
-    "CLIENT_ID": {
-      "required": true
-    },
-    "CLIENT_SECRET": {
-      "required": true
-    },
     "DEBUG": {
-      "required": true
+      "value": "TRUE"
     },
     "MONGODB_URI": {
       "required": true
     },
     "PYTHONUNBUFFERED": {
-      "required": true
+      "value": "TRUE"
     },
     "SPOTIPY_CLIENT_ID": {
       "required": true
     },
     "SPOTIPY_CLIENT_SECRET": {
-      "required": true
-    },
-    "SPOTIPY_REDIRECT_URI": {
       "required": true
     }
   },
