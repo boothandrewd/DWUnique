@@ -1,5 +1,5 @@
 """ app/ArchiveManager.py
-Class for interfacing with the database.
+Database interface.
 """
 import os
 from datetime import date, datetime
@@ -80,30 +80,22 @@ class ArchiveManager:
 
     def update(self):
         """ Determines the current new playlist and updates database. """
-        playlist_updated = True
+        # Get Spotify's DW
+        sdw = spotify.user_playlist('spotify', self.playlistId)
+        sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
 
-        # Only perform update if different week
-        today_string = date.today().strftime(TIME_FORMAT)
-        cpd = self.getCurrentPlaylistDate()
-        if cpd == '' or date_to_week(today_string) != date_to_week(cpd):
-            # Get Spotify's DW
-            sdw = spotify.user_playlist('spotify', self.playlistId)
-            sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
+        # Determine which tracks are new
+        new_tracks = list(set(sdw_tracks) - set(self.getHistory()))
 
-            # Determine which tracks are new
-            new_tracks = list(set(sdw_tracks) - set(self.getHistory()))
+        # If there are new tracks, update database
+        if new_tracks != self.getCurrentPlaylist():
+            today_string = date.today().strftime(TIME_FORMAT)
+            res = archives.update_one(self.playlist_filter, {
+                '$set': {
+                    'playlist_date': today_string,
+                    'playlists.' + today_string: new_tracks
+                },
+            })
+            return True
 
-            # If there are new tracks, update database
-            if new_tracks != self.getCurrentPlaylist():
-                res = archives.update_one(self.playlist_filter, {
-                    '$set': {
-                        'playlist_date': today_string,
-                        'playlists.' + today_string: new_tracks
-                    },
-                })
-
-            # No new tracks, but different week, so set updated to false
-            else:
-                playlist_updated = False
-
-        return playlist_updated
+        return False
