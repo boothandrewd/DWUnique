@@ -36,20 +36,3 @@ if date.today().weekday() == 0:
 
             else:
                 playlist_ids.remove(playlist_id)
-
-
-            # # Only perform update if different week
-            # today_string = today_as_string()
-            # cpd = am.getDwUniqueDate()
-            # if cpd == '' or date_to_week(today_string) != date_to_week(cpd):
-            #     # If there was an update, remove from update list and alert user
-            #     if am.update():
-            #         playlist_ids.remove(playlist_id)
-            #         mobile_number = am.getMobileNumber()
-            #         if mobile_number:
-            #             send_sms(mobile_number, 'Your DWUnique has been updated!')
-            #
-            #
-            # # # Otherwise same week, so remove from update list
-            # # else:
-            # #     playlist_ids.remove(playlist_id)
