@@ -4,12 +4,6 @@
   "scripts": {
   },
   "env": {
-    "CLIENT_ID": {
-      "required": true
-    },
-    "CLIENT_SECRET": {
-      "required": true
-    },
     "DEBUG": {
       "required": true
     },
