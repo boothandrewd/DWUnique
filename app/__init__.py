@@ -31,7 +31,7 @@ def start():
 
         # Redirect user to playlist page
         if len(error) == 0:
-            am.update()
+            # am.update()
             return redirect('/playlist/' + playlist_id)
 
     # On GET render template
@@ -41,4 +41,4 @@ def start():
 @server.route('/playlist/<playlist_id>')
 def playlist_page(playlist_id):
     am = ArchiveManager(playlist_id)
-    return render_template('playlist.html', playlist=am.getCurrentPlaylist())
+    return render_template('playlist.html', playlist=am.getDwUnique())
