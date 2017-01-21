@@ -2,7 +2,7 @@
 Class for interfacing with the database.
 """
 import os
-from datetime import date
+from datetime import date, datetime
 
 from pymongo import MongoClient
 import spotipy
@@ -10,10 +10,14 @@ from spotipy.oauth2 import SpotifyClientCredentials as spCreds
 
 from app.utils import is_hash, clean_mobile_number
 
-TIME_FORMAT = '%A_%d_%b_%Y'
-
 archives = MongoClient(os.environ['MONGODB_URI']).DWUnique.archives
 spotify = spotipy.Spotify(client_credentials_manager=spCreds())
+
+TIME_FORMAT = '%A_%d_%b_%Y'
+
+def date_to_week(date_string):
+    """ Date string to week function. """
+    return datetime.strptime(date_string, TIME_FORMAT).isocalendar()[1]
 
 
 class ArchiveManager:
@@ -29,12 +33,11 @@ class ArchiveManager:
         self.playlistId = playlist_id
         self.playlist_filter = {'playlist_id': self.playlistId}
         target_archive = archives.find_one(self.playlist_filter)
-        if not target_archive:
+        if target_archive == None:
             archives.insert_one({
                 'playlist_id': self.playlistId,
                 'mobile_number': mobile_number and clean_mobile_number(mobile_number),
-                'playlists': [],
-                'playlist': [],
+                'playlists': {},
                 'playlist_date': ''
             })
 
@@ -49,44 +52,58 @@ class ArchiveManager:
         return archives.find_one(self.playlist_filter, {
             '_id': 0,
             'mobile_number': 1
-        })['mobile_number'] or None
+        })['mobile_number']
 
     def getCurrentPlaylist(self):
         """ Gets a list of track_ids referring to the current DWUnique. """
+        try:
+            return self.getPlaylists()[self.getCurrentPlaylistDate()] or []
+        except:
+            return []
+
+    def getCurrentPlaylistDate(self):
         return archives.find_one(self.playlist_filter, {
             '_id': 0,
-            'playlist': 1
-        })['playlist'] or []
+            'playlist_date': 1
+        })['playlist_date']
 
     def getPlaylists(self):
-        """ Gets list of dated DWUniques, which are each lists of track_ids. """
+        """ Gets list of dated DWUniques. """
         return archives.find_one(self.playlist_filter, {
             '_id': 0,
             'playlists': 1
-        })['playlists'] or []
+        })['playlists'] or {}
 
     def getHistory(self):
         """ Gets a list of all previous tracks by track_id. """
-        return [i for t in self.getPlaylists() for i in t[1]]
+        return [val for val in self.getPlaylists().values() for val in val]
 
     def update(self):
         """ Determines the current new playlist and updates database. """
-        playlist_updated = False
+        playlist_updated = True
 
-        # Get Spotify's DW
-        sdw = spotify.user_playlist('spotify', self.playlistId)
-        sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
-        print(sdw_tracks)
+        # Only perform update if different week
+        today_string = date.today().strftime(TIME_FORMAT)
+        cpd = self.getCurrentPlaylistDate()
+        if cpd == '' or date_to_week(today_string) != date_to_week(cpd):
+            # Get Spotify's DW
+            sdw = spotify.user_playlist('spotify', self.playlistId)
+            sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
 
-        # Determine which tracks are new
-        new_tracks = list(set(sdw_tracks) - set(self.getHistory()))
+            # Determine which tracks are new
+            new_tracks = list(set(sdw_tracks) - set(self.getHistory()))
 
-        # If there are new tracks, update database
-        if new_tracks != self.getCurrentPlaylist():
-            today_string = date.today().strftime(TIME_FORMAT)
-            archives.update_one(self.playlist_filter, {
-                '$set': {'playlist': new_tracks},
-                '$push': {'playlists': (today_string, new_tracks)}
-            })
-            playlist_updated = True
+            # If there are new tracks, update database
+            if new_tracks != self.getCurrentPlaylist():
+                res = archives.update_one(self.playlist_filter, {
+                    '$set': {
+                        'playlist_date': today_string,
+                        'playlists.' + today_string: new_tracks
+                    },
+                })
+
+            # No new tracks, but different week, so set updated to false
+            else:
+                playlist_updated = False
+
         return playlist_updated

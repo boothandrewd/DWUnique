@@ -1,8 +1,5 @@
 """ app/__init__.py
 """
-import os
-import re
-
 from flask import Flask, redirect, render_template, request
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials as spCreds
