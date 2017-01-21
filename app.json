@@ -4,19 +4,28 @@
   "scripts": {
   },
   "env": {
+    "PYTHONUNBUFFERED": {
+      "value": "TRUE"
+    },
     "DEBUG": {
       "value": "TRUE"
     },
     "MONGODB_URI": {
       "required": true
     },
-    "PYTHONUNBUFFERED": {
-      "value": "TRUE"
-    },
     "SPOTIPY_CLIENT_ID": {
       "required": true
     },
     "SPOTIPY_CLIENT_SECRET": {
+      "required": true
+    },
+    "ACCOUNT_SID": {
+      "required": true
+    },
+    "AUTH_TOKEN": {
+      "required": true
+    },
+    "TWILIO_NUMBER": {
       "required": true
     }
   },
