@@ -1,0 +1,43 @@
+{
+  "name": "DWUnique",
+  "description": "Filter out those pesky DW duplicates!",
+  "scripts": {
+  },
+  "env": {
+    "CLIENT_ID": {
+      "required": true
+    },
+    "CLIENT_SECRET": {
+      "required": true
+    },
+    "DEBUG": {
+      "required": true
+    },
+    "MONGODB_URI": {
+      "required": true
+    },
+    "PYTHONUNBUFFERED": {
+      "required": true
+    },
+    "SPOTIPY_CLIENT_ID": {
+      "required": true
+    },
+    "SPOTIPY_CLIENT_SECRET": {
+      "required": true
+    },
+    "SPOTIPY_REDIRECT_URI": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "mongolab",
+    "scheduler"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
