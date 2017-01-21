@@ -63,9 +63,11 @@ class ArchiveManager:
 
     def update(self):
         playlist_updated = False
+
         # Get Spotify's DW
         sdw = spotify.user_playlist('spotify', self.playlistId)
         sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
+        print(sdw_tracks)
 
         # Determine which tracks are new
         new_tracks = list(set(sdw_tracks) - set(self.getHistory()))
