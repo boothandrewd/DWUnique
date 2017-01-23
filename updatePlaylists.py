@@ -32,6 +32,7 @@ if date.today().weekday() == 0:
 
             if not am.updatedThisWeek():
                 if am.playlistIsNew():
+                    am.addToDwUniques(am.getSpotifyUniques())
                     playlist_ids.remove(playlist_id)
                     mobile_number = am.getMobileNumber()
                     if mobile_number:
