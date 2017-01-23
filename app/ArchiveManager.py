@@ -8,7 +8,7 @@ from pymongo import MongoClient
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials as spCreds
 
-from app.utils import is_hash, clean_mobile_number, today_as_string
+from app.utils import is_hash, clean_mobile_number, today_as_string, date_to_week
 
 archives = MongoClient(
     os.environ['MONGODB_URI']
