@@ -19,10 +19,10 @@
     "SPOTIPY_CLIENT_SECRET": {
       "required": true
     },
-    "ACCOUNT_SID": {
+    "TWILIO_ACCOUNT_SID": {
       "required": true
     },
-    "AUTH_TOKEN": {
+    "TWILIO_AUTH_TOKEN": {
       "required": true
     },
     "TWILIO_NUMBER": {

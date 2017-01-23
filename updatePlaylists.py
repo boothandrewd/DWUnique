@@ -10,7 +10,10 @@ from pymongo import MongoClient
 from app.ArchiveManager import ArchiveManager
 from app.utils import send_sms, date_to_week
 
-archives = MongoClient(os.environ['MONGODB_URI']).DwUnique.archives
+archives = MongoClient(
+    os.environ['MONGODB_URI']
+).get_default_database().archives
+
 playlist_id_dicts = list(archives.find({'playlist_id': {'$exists': True}}, {
     '_id': 0,
     'playlist_id': 1
@@ -32,7 +35,10 @@ if date.today().weekday() == 0:
                     playlist_ids.remove(playlist_id)
                     mobile_number = am.getMobileNumber()
                     if mobile_number:
-                        send_sms(mobile_number, 'Your DWUnique has been updated!')
+                        send_sms(
+                            mobile_number,
+                            'Your DWUnique has been updated!'
+                        )
 
             else:
                 playlist_ids.remove(playlist_id)

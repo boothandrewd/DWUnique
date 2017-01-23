@@ -10,7 +10,9 @@ from spotipy.oauth2 import SpotifyClientCredentials as spCreds
 
 from app.utils import is_hash, clean_mobile_number, today_as_string
 
-archives = MongoClient(os.environ['MONGODB_URI']).DwUnique.archives
+archives = MongoClient(
+    os.environ['MONGODB_URI']
+).get_default_database().archives
 spotify = spotipy.Spotify(client_credentials_manager=spCreds())
 
 
@@ -30,7 +32,9 @@ class ArchiveManager:
         if target_archive == None:
             archives.insert_one({
                 'playlist_id': self.playlistId,
-                'mobile_number': mobile_number and clean_mobile_number(mobile_number),
+                'mobile_number': (
+                    mobile_number and clean_mobile_number(mobile_number)
+                ),
                 'playlists': {},
                 'playlist_date': ''
             })
@@ -102,30 +106,9 @@ class ArchiveManager:
     ###### Other Methods ######
 
     def updatedThisWeek(self):
-        return date_to_week(today_as_string()) == date_to_week(self.getDwUniqueDate())
+        return date_to_week(
+            today_as_string()) == date_to_week(self.getDwUniqueDate()
+        )
 
     def playlistIsNew(self):
         return self.getSpotifyUniques() != self.getDwUnique()
-
-
-    # def update(self):
-    #     """ Determines the current new playlist and updates database. """
-    #     # Get Spotify's DW
-    #     sdw = spotify.user_playlist('spotify', self.playlistId)
-    #     sdw_tracks = [item['track']['id'] for item in sdw['tracks']['items']]
-    #
-    #     # Determine which tracks are new
-    #     new_tracks = list(set(sdw_tracks) - set(self.getAllTracks()))
-    #
-    #     # If there are new tracks, update database
-    #     if new_tracks != self.getDwUnique():
-    #         today_string = today_as_string()
-    #         res = archives.update_one(self.playlist_filter, {
-    #             '$set': {
-    #                 'playlist_date': today_string,
-    #                 'playlists.' + today_string: new_tracks
-    #             },
-    #         })
-    #         return True
-    #
-    #     return False
