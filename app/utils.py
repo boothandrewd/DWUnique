@@ -8,7 +8,10 @@ from twilio.rest import TwilioRestClient
 
 TIME_FORMAT = '%A_%d_%b_%Y'
 
-client = TwilioRestClient(os.environ['ACCOUNT_SID'], os.environ['AUTH_TOKEN'])
+client = TwilioRestClient(
+    os.environ['TWILIO_ACCOUNT_SID'],
+    os.environ['TWILIO_AUTH_TOKEN']
+)
 TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 
 def parse_playlist_resource(resource):
