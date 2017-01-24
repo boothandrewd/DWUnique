@@ -5,7 +5,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials as spCreds
 
 from app.ArchiveManager import ArchiveManager
-from app.utils import parse_playlist_resource
+from app.utils import parse_playlist_resource, get_track_info
 
 # Set up spotipy
 spotify = spotipy.Spotify(client_credentials_manager=spCreds())
@@ -13,6 +13,7 @@ spotify = spotipy.Spotify(client_credentials_manager=spCreds())
 # Set up flask
 server = Flask(__name__)
 server.config.from_pyfile('config.py')
+
 
 @server.route('/', methods=['GET', 'POST'])
 def start():
@@ -31,7 +32,7 @@ def start():
 
         # Redirect user to playlist page
         if len(error) == 0:
-            # am.update()
+            am.update()
             return redirect('/playlist/' + playlist_id)
 
     # On GET render template
@@ -41,4 +42,15 @@ def start():
 @server.route('/playlist/<playlist_id>')
 def playlist_page(playlist_id):
     am = ArchiveManager(playlist_id)
-    return render_template('playlist.html', playlist=am.getDwUnique())
+    track_list = get_track_info(am.getDwUnique())
+    return render_template('dashboard.html', playlist=am.getDwUnique())
+
+
+@server.route('/playlist/<playlist_id>/number_change')
+def number_change(playlist_id):
+    am = ArchiveManager(playlist_id)
+    am.setMobileNumber(request.form['mobile_number'])
+
+
+if __name__ == '__main__':
+    server.run()

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/css/dashboard.css"/>
+
+    <title>DWUnique Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <h1 class="page-header">Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="container content">
+                    <div class="row">
+                        <div class="col-sm-3 sidebar">
+                            <ul class="nav nav-sidebar">
+                                <li class="active"><a href="https://getbootstrap.com/examples/dashboard/#">This Week's DWUnique</a></li>
+                                <li><a href="https://getbootstrap.com/examples/dashboard/#">Past DWUniques</a></li>
+                                <li><a href="https://getbootstrap.com/examples/dashboard/#">Settings</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Track ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%  for track_id in playlist %}
+                                        <tr>
+                                            <td>{{loop.index}}</td>
+                                            <td><a href="http://open.spotify.com/track/{{track_id}}">song link</a></td>
+                                        </tr>
+                                        {%  endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
