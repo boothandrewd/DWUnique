@@ -4,14 +4,11 @@ import os
 import re
 from datetime import datetime, date
 
-from twilio.rest import TwilioRestClient
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials as spCreds
 
 TIME_FORMAT = '%A_%d_%b_%Y'
 
-client = TwilioRestClient(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'])
-TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 
 spotify = spotipy.Spotify(client_credentials_manager=spCreds())
 
@@ -21,7 +18,7 @@ def parse_playlist_resource(resource):
     delimiter = '/'
     if resource.startswith('spotify'):
         delimiter = ':'
-    return resource.split(delimiter)[-1]
+    return resource.split(':' if resource.startswith('spotify') else '/')[-1]
 
 
 def clean_mobile_number(mobile_number):
@@ -32,11 +29,6 @@ def clean_mobile_number(mobile_number):
 def is_hash(candidate):
     """ Hash checking function """
     return not re.search(r'\W', candidate)
-
-
-def send_sms(mobile_number, message):
-    """ Text sending function """
-    client.messages.create(to=mobile_number, from_=TWILIO_NUMBER, body=message)
 
 
 def date_to_week(date_string):

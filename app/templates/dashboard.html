@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-sm-3 sidebar">
                             <ul class="nav nav-sidebar">
-                                <li class="active"><a href="https://getbootstrap.com/examples/dashboard/#">This Week's DWUnique</a></li>
+                                <li class="active"><a href="">This Week's DWUnique</a></li>
                                 <li><a href="https://getbootstrap.com/examples/dashboard/#">Past DWUniques</a></li>
                                 <li><a href="https://getbootstrap.com/examples/dashboard/#">Settings</a></li>
                             </ul>
@@ -36,16 +36,24 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Track ID</th>
+                                            <th>Name</th>
+                                            <th>Artist</th>
+                                            <th>Album</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {%  for track_id in playlist %}
+                                        {% for song in playlist %}
                                         <tr>
                                             <td>{{loop.index}}</td>
-                                            <td><a href="http://open.spotify.com/track/{{track_id}}">song link</a></td>
+                                            <td><a href="http://open.spotify.com/track/{{song.track_id}}">{{song.track_name}}</a></td>
+                                            <td>
+                                            {% for artist in song.artists %}
+                                                <a href="http://open.spotify.com/artist/{{artist.id}}">{{artist.name}}</a>{% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                            </td>
+                                            <td><a href="http://open.spotify.com/album/{{song.album_id}}">{{song.album_name}}</a></td>
                                         </tr>
-                                        {%  endfor %}
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
