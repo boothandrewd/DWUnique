@@ -24,7 +24,7 @@
     },
     "DWUNIQUE_REFRESH_TOKEN": {
       "required": true
-    }
+    },
     "TWILIO_ACCOUNT_SID": {
       "required": true
     },
