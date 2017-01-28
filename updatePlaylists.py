@@ -7,37 +7,27 @@ from datetime import date
 from pymongo import MongoClient
 from twilio.rest import TwilioRestClient
 
-from app.RecordManager import RecordManager
+from app.PlaylistManager import PlaylistManager
 
-# API objects
+# Twilio object
 client = TwilioRestClient(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'])
-TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
-
-
-# Helper function
-def send_sms(mobile_number, body):
-    """ Text sending function """
-    client.messages.create(to=mobile_number, from_=TWILIO_NUMBER, body=body)
 
 
 # Only update on Mondays
 if date.today().weekday() == 0:
-    # It's a Monday, so update the playlists
-
-    # Get list of playlist ids
-    archives = MongoClient(os.environ['MONGODB_URI']).get_default_database().archives
-    playlist_id_dicts = archives.find({'playlist_id': {'$exists': True}}, {
+    # Get list of user ids
+    users = MongoClient(os.environ['MONGODB_URI']).get_default_database().users
+    user_records = users.find({'user_id': {'$exists': True}}, {
         '_id': 0,
-        'playlist_id': 1
+        'user_id': 1,
     })
-    playlist_ids = [pid['playlist_id'] for pid in playlist_id_dicts]
+    user_ids = [pid['user_id'] for pid in user_records]
 
-    # Loop through playlist ids and update
-    for playlist_id in playlist_ids:
-        rc = RecordManager(playlist_id)
-        updated, filtered = rc.update()
-        if updated and rc.mobileNumber is not None:
+    # Loop through user ids and update
+    for user_id in user_ids:
+        pm = PlaylistManager(user_id)
+        updated = pm.update()
+        if updated and pm.mobileNumber is not None:
             message = 'Your DWUnique has been updated!'
-            message += '\nAnd there were some songs filtered!' if filtered else ''
-            message += '\nCheck it out at %s/playlist/%s' % (os.environ['APP_URL'], playlist_id)
-            send_sms(rc.mobileNumber, message)
+            message += f'\nCheck it out at https://play.spotify.com/user/dwunique/{pm.dwuId}'
+            client.messages.create(to=pm.mobileNumber, from_=os.environ['TWILIO_NUMBER'], body=message)

@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en"/>
 <head>
-  <meta charset="UTF-8"/>
+    <meta charset="UTF-8"/>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-  <link rel="stylesheet" href="static/css/start.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/css/connect.css">
 
-  <title>Start</title>
+    <title>Start</title>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <form method="post" class="form-start">
-      <h1>Start</h1>
+        <h1>Start</h1>
 
-      <!-- Resource -->
-      <div class="form-group">
-        <label for="pl-resource">Paste playlist URI, URL, or ID here</label>
-        {% if error %}
-          <div class="alert alert-danger" role="alert">{{error}}</div>
-        {% endif %}
-        <input type="text" class="form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
-        <span id="idHelpBlock" class="help-block">Navigate to the playlist's page in Spotify, click the button with three dots, and select "Copy Playlist Link" or "Copy Playlist URI".</span>
-      </div>
+        <!-- Resource -->
+        <div class="form-group">
+            <label for="pl-resource">Paste playlist URI, URL, or ID here</label>
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{error}}</div>
+            {% endif %}
+            <input type="text" class="form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
+            <span id="idHelpBlock" class="help-block">Navigate to the playlist's page in Spotify, click the button with three dots, and select "Copy Playlist Link" or "Copy Playlist URI".</span>
+        </div>
 
-{#      <!-- Mobile number -->#}
-{#      <div class="form-group">#}
-{#        <label for="mobile_number">Mobile number (optional)</label>#}
-{#        <input type="text" class="form-control" name="mobile_number" placeholder="(123) 456-7890" id="mobile_number"/>#}
-{#      </div>#}
+        <!-- Mobile number -->
+        <div class="form-group">
+            <label for="mobile_number">Mobile number (optional)</label>
+            <input type="text" class="form-control" name="mobile-number" placeholder="(123) 456-7890" id="mobile-number"/>
+        </div>
 
-      <!-- Submit button -->
-      <input type="submit" class="btn btn-primary" value="Submit"/>
+        <!-- Submit button -->
+        <input type="submit" class="btn btn-primary" value="Submit"/>
     </form>
-  </div>
+</div>
 </body>
 </html>

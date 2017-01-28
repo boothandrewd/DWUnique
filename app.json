@@ -19,6 +19,12 @@
     "SPOTIPY_CLIENT_SECRET": {
       "required": true
     },
+    "SPOTIPY_REDIRECT_URI": {
+      "required": true
+    },
+    "DWUNIQUE_REFRESH_TOKEN": {
+      "required": true
+    }
     "TWILIO_ACCOUNT_SID": {
       "required": true
     },
@@ -30,6 +36,9 @@
     },
     "APP_URL": {
       "required": true
+    },
+    "SECRET_KEY": {
+      "generator": "secret"
     }
   },
   "formation": {
