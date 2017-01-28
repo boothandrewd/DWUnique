@@ -16,19 +16,19 @@
 
       <!-- Resource -->
       <div class="form-group">
-        <label for="pl_resource">Copy and paste playlist URI, URL, or ID here</label>
-        {% if error.resource %}
-          <div class="alert alert-danger" role="alert">{{error.resource}}</div>
+        <label for="pl-resource">Paste playlist URI, URL, or ID here</label>
+        {% if error %}
+          <div class="alert alert-danger" role="alert">{{error}}</div>
         {% endif %}
-        <input type="text" class="form-control" name="pl_resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl_resource" autofocus required/>
+        <input type="text" class="form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
         <span id="idHelpBlock" class="help-block">Navigate to the playlist's page in Spotify, click the button with three dots, and select "Copy Playlist Link" or "Copy Playlist URI".</span>
       </div>
 
-      <!-- Mobile number -->
-      <div class="form-group">
-        <label for="mobile_number">Mobile number (optional)</label>
-        <input type="text" class="form-control" name="mobile_number" placeholder="(123) 456-7890" id="mobile_number"/>
-      </div>
+{#      <!-- Mobile number -->#}
+{#      <div class="form-group">#}
+{#        <label for="mobile_number">Mobile number (optional)</label>#}
+{#        <input type="text" class="form-control" name="mobile_number" placeholder="(123) 456-7890" id="mobile_number"/>#}
+{#      </div>#}
 
       <!-- Submit button -->
       <input type="submit" class="btn btn-primary" value="Submit"/>

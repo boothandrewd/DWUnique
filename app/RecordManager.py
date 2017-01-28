@@ -124,7 +124,7 @@ class RecordManager:
         # Returns dict of song data of all track ids
         historical_song_data = {}
         for date, dwunique in self.dwUniques:
-            historical_song_data[data] = list(songs.find({
+            historical_song_data[date] = list(songs.find({
                 'track_id': {'$in': self.dwUniques[date]}
             }))
         return historical_song_data
