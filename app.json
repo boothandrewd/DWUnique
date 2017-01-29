@@ -34,9 +34,6 @@
     "TWILIO_NUMBER": {
       "required": true
     },
-    "APP_URL": {
-      "required": true
-    },
     "SECRET_KEY": {
       "generator": "secret"
     }
