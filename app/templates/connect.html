@@ -1,38 +1,63 @@
 <!DOCTYPE html>
-<html lang="en"/>
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="/static/css/connect.css">
+    <link rel="stylesheet" href="/static/css/connect.css"/>
 
-    <title>Start</title>
+    <!-- JS -->
+    <script src="/static/js/signin.js" defer></script>
+
+    <!-- Page -->
+    <title>DWUnique - Connect</title>
 </head>
-<body>
-<div class="container">
-    <form method="post" class="form-start">
-        <h1>Start</h1>
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
 
-        <!-- Resource -->
-        <div class="form-group">
-            <label for="pl-resource">Paste playlist URI, URL, or ID here</label>
-            {% if error %}
-                <div class="alert alert-danger" role="alert">{{error}}</div>
-            {% endif %}
-            <input type="text" class="form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
-            <span id="idHelpBlock" class="help-block">Navigate to the playlist's page in Spotify, click the button with three dots, and select "Copy Playlist Link" or "Copy Playlist URI".</span>
+                    <!-- Nav -->
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h1 class="masthead-brand">DWUnique</h1>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="inner cover">
+                        <h2 class="cover-heading">Connect your Discover Weekly</h2>
+                        <form method="post" class="form-start">
+
+                            <!-- Resource -->
+                            <div class="form-group">
+                                <label class="lead" for="pl-resource">Paste playlist URI, URL, or ID here</label>
+                                {% if error %}
+                                    <div class="alert alert-danger" role="alert">{{error}}</div>
+                                {% endif %}
+                                <input type="text" class="lead form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
+                            </div>
+
+                            <!-- Mobile number -->
+                            <div class="form-group">
+                                <label class="lead" for="mobile_number">Mobile number (optional)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">+1</div>
+                                    <input type="text" class="lead form-control" name="mobile-number" placeholder="234 567 8910" id="mobile-number"/>
+                                </div>
+                            </div>
+
+                            <!-- Submit button -->
+                            <input type="submit" class="btn btn-default lead" value="Submit"/>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
-
-        <!-- Mobile number -->
-        <div class="form-group">
-            <label for="mobile_number">Mobile number (optional)</label>
-            <input type="text" class="form-control" name="mobile-number" placeholder="(123) 456-7890" id="mobile-number"/>
-        </div>
-
-        <!-- Submit button -->
-        <input type="submit" class="btn btn-primary" value="Submit"/>
-    </form>
-</div>
-</body>
+    </body>
 </html>
