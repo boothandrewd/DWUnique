@@ -63,7 +63,8 @@ class PlaylistManager:
         self.dwId = user_record['dw_id']
         self.dwuId = user_record['dwu_id']
         self.dwhId = user_record['dwh_id']
-        self.mobileNumber = user_record['mobile_number']
+        self._mobileNumber = user_record['mobile_number']
+        self._mobileUpdateSetting = user_record['send_mobile_updates']
 
     def update(self):
         # Get user data
@@ -123,3 +124,21 @@ class PlaylistManager:
 
             return True
         return False
+
+    def setMobileNumber(self, mobile_number):
+        self._mobileNumber = mobile_number
+        users.update_one({'user_id': self.userId}, {
+            '$set': {'mobile_number': self._mobileNumber}
+        })
+
+    def getMobileNumber(self):
+        return self._mobileNumber
+
+    def setmobileUpdateSetting(self, setting):
+        self._mobileUpdateSetting = setting
+        users.update_one({'user_id': self.userId}, {
+            '$set': {'mobile_update_setting': self._mobileUpdateSetting}
+        })
+
+    def getmobileUpdateSetting(self):
+        return self._mobileUpdateSetting
