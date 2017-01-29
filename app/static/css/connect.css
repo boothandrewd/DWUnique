@@ -171,3 +171,7 @@ body {
         width: 700px;
     }
 }
+
+.popover {
+    color: #333333;
+}
