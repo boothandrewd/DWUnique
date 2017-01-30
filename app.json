@@ -31,6 +31,9 @@
     "TWILIO_NUMBER": {
       "required": true
     },
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
     "SECRET_KEY": {
       "generator": "secret"
     }
