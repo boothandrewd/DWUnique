@@ -1,18 +1,75 @@
+{# app/templates/signin.html
+ #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <link rel="stylesheet" href="/static/css/siginin.css"/>
 
-    <title>Title</title>
+    <!-- JS -->
+    <script src="/static/js/signin.js" defer></script>
+
+    <!-- Page -->
+    <title>DWUnique</title>
 </head>
-<body>
-    <div class="container">
-        <form method="post" class="form-start">
-            <h3>Looks like you need to sign in first.</h3>
-            <input type="submit" class="btn btn-success" value="Go" id="sign-in" autofocus/>
-        </form>
-    </div>
-</body>
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+
+                    <!-- Nav -->
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h1 class="masthead-brand">DWUnique</h1>
+                            <nav>
+                                <ul class="nav masthead-nav">
+                                    <li><a href="javascript:toggle_hiw();">How It Works</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="inner cover">
+                        <div id="landing-content">
+                            <h2 class="cover-heading">Filter out those pesky Discover Weekly Duplicates!</h2>
+                            <p class="lead">You know that feeling when you're listening through your Discover Weekly Monday morning and you run into a song Spotify's already tried to show you? Well DWUnique is here to help!</p>
+                        </div>
+                        <div id="how-it-works-content" hidden="true">
+                            <ol>
+                                <li class="lead">
+                                    <p>You sign in to Spotify</p>
+                                </li>
+                                <li class="lead">
+                                    <p>Every Monday, we update your DWUnique</p>
+                                </li>
+                                <li class="lead">
+                                    <p>You listen to only the new songs from your Discover Weekly</p>
+                                </li>
+                            </ol>
+                        </div>
+                        <p class="lead">
+                            <form method="post">
+                                <input type="submit" class="btn btn-lg btn-default" value="Let's Go"/>
+                            </form>
+                        </p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="mastfoot">
+                        <div class="inner">
+                            <p>Check me out on <a href="https://github.com/boothandrewd/DWUnique">GitHub</a></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

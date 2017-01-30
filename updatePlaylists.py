@@ -1,22 +1,22 @@
 """ app/updatePlaylists.py
 Script issued by Heroku Scheduler to update DwUniques.
 """
-import os
 from datetime import date
 
 from pymongo import MongoClient
 from twilio.rest import TwilioRestClient
 
+from app import MONGODB_URI, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER
 from app.PlaylistManager import PlaylistManager
 
 # Twilio object
-client = TwilioRestClient(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'])
+client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 
 # Only update on Mondays
 if date.today().weekday() == 0:
     # Get list of user ids
-    users = MongoClient(os.environ['MONGODB_URI']).get_default_database().users
+    users = MongoClient(MONGODB_URI).get_default_database().users
     user_records = users.find({'user_id': {'$exists': True}}, {
         '_id': 0,
         'user_id': 1,
@@ -27,7 +27,7 @@ if date.today().weekday() == 0:
     for user_id in user_ids:
         pm = PlaylistManager(user_id)
         updated = pm.update()
-        if updated and pm.mobileNumber is not None:
+        if updated and pm.getMobileNumber() is not None:
             message = 'Your DWUnique has been updated!'
             message += f'\nCheck it out at https://play.spotify.com/user/dwunique/{pm.dwuId}'
-            client.messages.create(to=pm.mobileNumber, from_=os.environ['TWILIO_NUMBER'], body=message)
+            client.messages.create(to=pm.getMobileNumber(), from_=TWILIO_NUMBER, body=message)

@@ -1,6 +1,5 @@
 """ app/PlaylistManager.py
 """
-import os
 import json
 from datetime import datetime
 
@@ -9,18 +8,26 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from pymongo import MongoClient
 
+from app import MONGODB_URI, DWUNIQUE_REFRESH_TOKEN, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
+
 # Get database connection
-users = MongoClient(os.environ['MONGODB_URI']).get_default_database().users
+users = MongoClient(MONGODB_URI).get_default_database().users
 
 # Get access to DWUnique Spotify account
 access_request = requests.post('https://accounts.spotify.com/api/token', data={
     'grant_type': 'refresh_token',
-    'refresh_token': os.environ['DWUNIQUE_REFRESH_TOKEN'],
-    'client_id': os.environ['SPOTIPY_CLIENT_ID'],
-    'client_secret': os.environ['SPOTIPY_CLIENT_SECRET']
+    'refresh_token': DWUNIQUE_REFRESH_TOKEN,
+    'client_id': SPOTIFY_CLIENT_ID,
+    'client_secret': SPOTIFY_CLIENT_SECRET
 })
 dw_access_token = json.loads(access_request.content.decode('utf-8'))['access_token']
-dwu_spotify = spotipy.Spotify(dw_access_token, client_credentials_manager=SpotifyClientCredentials())
+dwu_spotify = spotipy.Spotify(
+    auth=dw_access_token,
+    client_credentials_manager=SpotifyClientCredentials(
+        SPOTIFY_CLIENT_ID,
+        SPOTIFY_CLIENT_SECRET
+    )
+)
 
 
 class PlaylistManager:
@@ -36,8 +43,8 @@ class PlaylistManager:
                 dwu = dwu_spotify.user_playlist_create('dwunique', f"{display_name}'s DWUnique")
                 dwh = dwu_spotify.user_playlist_create('dwunique', f"{display_name}'s DW History")
             else:
-                dwu = dwu_spotify.user_playlist_create('dwunique', "DWUnique")
-                dwh = dwu_spotify.user_playlist_create('dwunique', "DW History")
+                dwu = dwu_spotify.user_playlist_create('dwunique', 'DWUnique')
+                dwh = dwu_spotify.user_playlist_create('dwunique', 'DW History')
 
             # Add to database
             users.update_one({'user_id': self.userId}, {
@@ -52,18 +59,25 @@ class PlaylistManager:
             access_request = requests.post('https://accounts.spotify.com/api/token', data={
                 'grant_type': 'refresh_token',
                 'refresh_token': user_record['refresh_token'],
-                'client_id': os.environ['SPOTIPY_CLIENT_ID'],
-                'client_secret': os.environ['SPOTIPY_CLIENT_SECRET']
+                'client_id': SPOTIFY_CLIENT_ID,
+                'client_secret': SPOTIFY_CLIENT_SECRET
             })
             access_token = json.loads(access_request.content.decode('utf-8'))['access_token']
-            auth_spotify = spotipy.Spotify(access_token, client_credentials_manager=SpotifyClientCredentials())
+            auth_spotify = spotipy.Spotify(
+                auth=access_token,
+                client_credentials_manager=SpotifyClientCredentials(
+                    SPOTIFY_CLIENT_ID,
+                    SPOTIFY_CLIENT_SECRET
+                )
+            )
             auth_spotify.user_playlist_follow_playlist('dwunique', user_record['dwu_id'])
 
         # Populate members
         self.dwId = user_record['dw_id']
         self.dwuId = user_record['dwu_id']
         self.dwhId = user_record['dwh_id']
-        self.mobileNumber = user_record['mobile_number']
+        self._mobileNumber = user_record['mobile_number']
+        self._mobileUpdateSetting = user_record['mobile_update_setting']
 
     def update(self):
         # Get user data
@@ -123,3 +137,21 @@ class PlaylistManager:
 
             return True
         return False
+
+    def setMobileNumber(self, mobile_number):
+        self._mobileNumber = mobile_number
+        users.update_one({'user_id': self.userId}, {
+            '$set': {'mobile_number': self._mobileNumber}
+        })
+
+    def getMobileNumber(self):
+        return self._mobileNumber
+
+    def setmobileUpdateSetting(self, setting):
+        self._mobileUpdateSetting = setting
+        users.update_one({'user_id': self.userId}, {
+            '$set': {'mobile_update_setting': self._mobileUpdateSetting}
+        })
+
+    def getmobileUpdateSetting(self):
+        return self._mobileUpdateSetting

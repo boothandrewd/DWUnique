@@ -11,12 +11,28 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from pymongo import MongoClient
 
-from app.PlaylistManager import PlaylistManager
-
 # Set up flask
 server = Flask(__name__)
 server.config.from_pyfile('config.py')
-users = MongoClient(os.environ['MONGODB_URI']).get_default_database().users
+
+# Get env vars
+# From app config
+APP_URL = server.config['APP_URL']
+SPOTIFY_REDIRECT_URI = server.config['SPOTIFY_REDIRECT_URI']
+# From env
+MONGODB_URI = os.environ['MONGODB_URI']
+SPOTIFY_CLIENT_ID = os.environ['SPOTIFY_CLIENT_ID']
+SPOTIFY_CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
+DWUNIQUE_REFRESH_TOKEN = os.environ['DWUNIQUE_REFRESH_TOKEN']
+TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
+TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
+
+# Last import
+from app.PlaylistManager import PlaylistManager
+
+# Set up mongo
+users = MongoClient(MONGODB_URI).get_default_database().users
 
 
 # Helper function
@@ -26,30 +42,34 @@ def parse_playlist_resource(resource):
 # Auth constants
 USER_AUTH_PARAMS = {
     'response_type': 'code',
-    'redirect_uri': os.environ['SPOTIPY_REDIRECT_URI'],
+    'redirect_uri': SPOTIFY_REDIRECT_URI,
     'scope': 'user-read-email',
     'state': 'user-auth',
-    'client_id': os.environ['SPOTIPY_CLIENT_ID']
+    'client_id': SPOTIFY_CLIENT_ID
 }
 
 
 # Routes
 @server.route('/')
 def index():
+    # If session started, go to playlists
     if 'user_id' in session:
         return redirect('/playlists')
 
+    # If valid cookie on client, go to playlists
     user_id = request.cookies.get('user_id')
     if user_id is not None:
         user_record = users.find_one({'user_id': user_id})
         if user_record is not None:
             return redirect('/playlists')
 
+    # Sign in otherwise
     return redirect('/signin')
 
 
 @server.route('/signin', methods=['GET', 'POST'])
 def signin():
+    # Submit or render
     if request.method == 'POST':
         return redirect(f'https://accounts.spotify.com/authorize/?{urlencode(USER_AUTH_PARAMS)}')
     return render_template('signin.html')
@@ -62,14 +82,22 @@ def spotify_auth_callback():
     access_response = requests.post('https://accounts.spotify.com/api/token', data={
         'grant_type': 'authorization_code',
         'code': str(auth_token),
-        'redirect_uri': os.environ['SPOTIPY_REDIRECT_URI'],
-        'client_id': os.environ['SPOTIPY_CLIENT_ID'],
-        'client_secret': os.environ['SPOTIPY_CLIENT_SECRET']
+        'redirect_uri': SPOTIFY_REDIRECT_URI,
+        'client_id': SPOTIFY_CLIENT_ID,
+        'client_secret': SPOTIFY_CLIENT_SECRET
     })
     access_data = json.loads(access_response.text)
     access_token = access_data['access_token']
     refresh_token = access_data['refresh_token']
-    auth_spotify = spotipy.Spotify(access_token, client_credentials_manager=SpotifyClientCredentials())
+
+    # Start sessiong with spotify
+    auth_spotify = spotipy.Spotify(
+        auth=access_token,
+        client_credentials_manager=SpotifyClientCredentials(
+            SPOTIFY_CLIENT_ID,
+            SPOTIFY_CLIENT_SECRET
+        )
+    )
 
     # Get user data
     current_user = auth_spotify.current_user()
@@ -84,13 +112,17 @@ def spotify_auth_callback():
             'user_id': user_id,
             'user_display_name': current_user['display_name'],
             'user_email': current_user['email'],
-            'mobile_number': '',
+            'email_update_setting': False,
             'refresh_token': refresh_token,
+            'mobile_number': '',
+            'mobile_update_setting': True,
             'dw_id': '',
             'dwu_id': '',
             'dwh_id': '',
             'last_update': ''
         })
+
+    # Set client-side memory structures
     session['user_id'] = user_id
     resp = make_response(redirect('/playlists'))
     resp.set_cookie('user_id', user_id)
@@ -100,6 +132,7 @@ def spotify_auth_callback():
 
 @server.route('/connect', methods=['GET', 'POST'])
 def connect():
+    # Sign in if not signed in
     if 'user_id' not in session:
         return redirect('/signin')
 
@@ -110,7 +143,11 @@ def connect():
 
         # Verify it actually exists on Spotify servers
         try:
-            spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()).user_playlist('spotify', playlist_id)
+            spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+                SPOTIFY_CLIENT_ID,
+                SPOTIFY_CLIENT_SECRET
+            ))
+            spotify.user_playlist('spotify', playlist_id)
         except spotipy.client.SpotifyException:
             return render_template('connect.html', error='Please enter a valid URL, URI, or ID')
 
@@ -128,18 +165,34 @@ def connect():
     return render_template('connect.html', error='')
 
 
-@server.route('/playlists')
+@server.route('/playlists', methods=['GET', 'POST'])
 def playlists():
+    # Sign in if not signed in
     if 'user_id' not in session:
         return redirect('/signin')
 
+    pm = PlaylistManager(session['user_id'])
+
+    if request.method == 'POST':
+        pm.setMobileNumber(re.sub(r'\D', '', request.form['mobile-number']))
+        setting = 'mobile-update-setting' in request.form
+        pm.setmobileUpdateSetting(setting)
+
+
+    # Get user data, redirect to connect if no DW connected
     user_record = users.find_one({'user_id': session['user_id']})
     if user_record['dw_id'] == '':
         return redirect('/connect')
 
-    pm = PlaylistManager(session['user_id'])
+    # Get user playlist data, render page
     pm.update()
-    return render_template('playlists.html', dwu=pm.dwuId, dwh=pm.dwhId, dw=pm.dwId)
+    return render_template('dashboard.html',
+        dwu=pm.dwuId,
+        dwh=pm.dwhId,
+        dw=pm.dwId,
+        mobile_number=pm.getMobileNumber(),
+        mobile_update_setting=pm.getmobileUpdateSetting()
+    )
 
 
 if __name__ == '__main__':
