@@ -1,4 +1,4 @@
-/* static/js/signin.js
+/* app/static/js/signin.js
  */
 
 function toggle_hiw(){

@@ -165,11 +165,19 @@ def connect():
     return render_template('connect.html', error='')
 
 
-@server.route('/playlists')
+@server.route('/playlists', methods=['GET', 'POST'])
 def playlists():
     # Sign in if not signed in
     if 'user_id' not in session:
         return redirect('/signin')
+
+    pm = PlaylistManager(session['user_id'])
+
+    if request.method == 'POST':
+        pm.setMobileNumber(re.sub(r'\D', '', request.form['mobile-number']))
+        setting = 'mobile-update-setting' in request.form
+        pm.setmobileUpdateSetting(setting)
+
 
     # Get user data, redirect to connect if no DW connected
     user_record = users.find_one({'user_id': session['user_id']})
@@ -177,9 +185,14 @@ def playlists():
         return redirect('/connect')
 
     # Get user playlist data, render page
-    pm = PlaylistManager(session['user_id'])
     pm.update()
-    return render_template('playlists.html', dwu=pm.dwuId, dwh=pm.dwhId, dw=pm.dwId)
+    return render_template('dashboard.html',
+        dwu=pm.dwuId,
+        dwh=pm.dwhId,
+        dw=pm.dwId,
+        mobile_number=pm.getMobileNumber(),
+        mobile_update_setting=pm.getmobileUpdateSetting()
+    )
 
 
 if __name__ == '__main__':
