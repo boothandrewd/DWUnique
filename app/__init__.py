@@ -18,11 +18,11 @@ server.config.from_pyfile('config.py')
 # Get env vars
 # From app config
 APP_URL = server.config['APP_URL']
-SPOTIPY_REDIRECT_URI = server.config['SPOTIPY_REDIRECT_URI']
+SPOTIFY_REDIRECT_URI = server.config['SPOTIFY_REDIRECT_URI']
 # From env
 MONGODB_URI = os.environ['MONGODB_URI']
-SPOTIPY_CLIENT_ID = os.environ['SPOTIPY_CLIENT_ID']
-SPOTIPY_CLIENT_SECRET = os.environ['SPOTIPY_CLIENT_SECRET']
+SPOTIFY_CLIENT_ID = os.environ['SPOTIFY_CLIENT_ID']
+SPOTIFY_CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
 DWUNIQUE_REFRESH_TOKEN = os.environ['DWUNIQUE_REFRESH_TOKEN']
 TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
@@ -42,10 +42,10 @@ def parse_playlist_resource(resource):
 # Auth constants
 USER_AUTH_PARAMS = {
     'response_type': 'code',
-    'redirect_uri': SPOTIPY_REDIRECT_URI,
+    'redirect_uri': SPOTIFY_REDIRECT_URI,
     'scope': 'user-read-email',
     'state': 'user-auth',
-    'client_id': SPOTIPY_CLIENT_ID
+    'client_id': SPOTIFY_CLIENT_ID
 }
 
 
@@ -82,9 +82,9 @@ def spotify_auth_callback():
     access_response = requests.post('https://accounts.spotify.com/api/token', data={
         'grant_type': 'authorization_code',
         'code': str(auth_token),
-        'redirect_uri': SPOTIPY_REDIRECT_URI,
-        'client_id': SPOTIPY_CLIENT_ID,
-        'client_secret': SPOTIPY_CLIENT_SECRET
+        'redirect_uri': SPOTIFY_REDIRECT_URI,
+        'client_id': SPOTIFY_CLIENT_ID,
+        'client_secret': SPOTIFY_CLIENT_SECRET
     })
     access_data = json.loads(access_response.text)
     access_token = access_data['access_token']
@@ -94,8 +94,8 @@ def spotify_auth_callback():
     auth_spotify = spotipy.Spotify(
         auth=access_token,
         client_credentials_manager=SpotifyClientCredentials(
-            SPOTIPY_CLIENT_ID,
-            SPOTIPY_CLIENT_SECRET
+            SPOTIFY_CLIENT_ID,
+            SPOTIFY_CLIENT_SECRET
         )
     )
 
@@ -144,8 +144,8 @@ def connect():
         # Verify it actually exists on Spotify servers
         try:
             spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
-                SPOTIPY_CLIENT_ID,
-                SPOTIPY_CLIENT_SECRET
+                SPOTIFY_CLIENT_ID,
+                SPOTIFY_CLIENT_SECRET
             ))
             spotify.user_playlist('spotify', playlist_id)
         except spotipy.client.SpotifyException:

@@ -13,13 +13,10 @@
     "MONGODB_URI": {
       "required": true
     },
-    "SPOTIPY_CLIENT_ID": {
+    "SPOTIFY_CLIENT_ID": {
       "required": true
     },
-    "SPOTIPY_CLIENT_SECRET": {
-      "required": true
-    },
-    "SPOTIPY_REDIRECT_URI": {
+    "SPOTIFY_CLIENT_SECRET": {
       "required": true
     },
     "DWUNIQUE_REFRESH_TOKEN": {

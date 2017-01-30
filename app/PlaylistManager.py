@@ -8,7 +8,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from pymongo import MongoClient
 
-from app import MONGODB_URI, DWUNIQUE_REFRESH_TOKEN, SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET
+from app import MONGODB_URI, DWUNIQUE_REFRESH_TOKEN, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
 
 # Get database connection
 users = MongoClient(MONGODB_URI).get_default_database().users
@@ -17,15 +17,15 @@ users = MongoClient(MONGODB_URI).get_default_database().users
 access_request = requests.post('https://accounts.spotify.com/api/token', data={
     'grant_type': 'refresh_token',
     'refresh_token': DWUNIQUE_REFRESH_TOKEN,
-    'client_id': SPOTIPY_CLIENT_ID,
-    'client_secret': SPOTIPY_CLIENT_SECRET
+    'client_id': SPOTIFY_CLIENT_ID,
+    'client_secret': SPOTIFY_CLIENT_SECRET
 })
 dw_access_token = json.loads(access_request.content.decode('utf-8'))['access_token']
 dwu_spotify = spotipy.Spotify(
     auth=dw_access_token,
     client_credentials_manager=SpotifyClientCredentials(
-        SPOTIPY_CLIENT_ID,
-        SPOTIPY_CLIENT_SECRET
+        SPOTIFY_CLIENT_ID,
+        SPOTIFY_CLIENT_SECRET
     )
 )
 
@@ -59,15 +59,15 @@ class PlaylistManager:
             access_request = requests.post('https://accounts.spotify.com/api/token', data={
                 'grant_type': 'refresh_token',
                 'refresh_token': user_record['refresh_token'],
-                'client_id': SPOTIPY_CLIENT_ID,
-                'client_secret': SPOTIPY_CLIENT_SECRET
+                'client_id': SPOTIFY_CLIENT_ID,
+                'client_secret': SPOTIFY_CLIENT_SECRET
             })
             access_token = json.loads(access_request.content.decode('utf-8'))['access_token']
             auth_spotify = spotipy.Spotify(
                 auth=access_token,
                 client_credentials_manager=SpotifyClientCredentials(
-                    SPOTIPY_CLIENT_ID,
-                    SPOTIPY_CLIENT_SECRET
+                    SPOTIFY_CLIENT_ID,
+                    SPOTIFY_CLIENT_SECRET
                 )
             )
             auth_spotify.user_playlist_follow_playlist('dwunique', user_record['dwu_id'])

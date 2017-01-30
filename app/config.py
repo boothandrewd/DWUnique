@@ -16,4 +16,4 @@ if 'APP_URL'in os.environ:
 else:
     APP_URL = f'https://{os.environ["HEROKU_APP_NAME"]}.herokuapp.com'
 
-SPOTIPY_REDIRECT_URI = os.path.join(APP_URL, 'spotify-auth-callback')
+SPOTIFY_REDIRECT_URI = os.path.join(APP_URL, 'spotify-auth-callback')
