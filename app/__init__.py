@@ -54,14 +54,14 @@ USER_AUTH_PARAMS = {
 def index():
     # If session started, go to playlists
     if 'user_id' in session:
-        return redirect('/playlists')
+        return redirect('/dashboard')
 
     # If valid cookie on client, go to playlists
     user_id = request.cookies.get('user_id')
     if user_id is not None:
         user_record = users.find_one({'user_id': user_id})
         if user_record is not None:
-            return redirect('/playlists')
+            return redirect('/dashboard')
 
     # Sign in otherwise
     return redirect('/signin')
@@ -124,7 +124,7 @@ def spotify_auth_callback():
 
     # Set client-side memory structures
     session['user_id'] = user_id
-    resp = make_response(redirect('/playlists'))
+    resp = make_response(redirect('/dashboard'))
     resp.set_cookie('user_id', user_id)
 
     return resp
@@ -160,12 +160,12 @@ def connect():
         })
 
         # Redirect user to their playlists
-        return redirect('/playlists')
+        return redirect('/dashboard')
 
     return render_template('connect.html', error='')
 
 
-@server.route('/playlists', methods=['GET', 'POST'])
+@server.route('/dashboard', methods=['GET', 'POST'])
 def playlists():
     # Sign in if not signed in
     if 'user_id' not in session:

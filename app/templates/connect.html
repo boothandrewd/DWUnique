@@ -19,6 +19,10 @@
 
     <!-- Page -->
     <title>DWUnique - Connect</title>
+    <link rel="shortcut icon" href="/static/img/favicon.png">
+    <meta name="description" content="You know that feeling when you're listening through your Discover Weekly Monday morning and you run into a song Spotify's already tried to show you? Well DWUnique is here to help!">
+    <meta name="keywords" content="music, discover, weekly, spotify">
+    <meta name="author" content="Andrew D. Booth">
 </head>
     <body>
         <div class="site-wrapper">
@@ -43,7 +47,7 @@
                                 {% if error %}
                                     <div class="alert alert-danger" role="alert">{{error}}</div>
                                 {% endif %}
-                                <input type="text" class="lead form-control" name="pl-resource" placeholder="spotify:user:spotify:playlist:37i9dQZEVXcPsqrzUr4kra" aria-describedby="idHelpBlock" id="pl-resource" autofocus required/>
+                                <input type="text" class="lead form-control" name="pl-resource" id="pl-resource" autofocus required/>
                             </div>
 
                             <!-- Mobile number -->
@@ -51,7 +55,7 @@
                                 <label class="lead" for="mobile_number">Mobile number (optional)</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">+1</div>
-                                    <input type="text" class="lead form-control" name="mobile-number" placeholder="234 567 8910" id="mobile-number"/>
+                                    <input type="text" class="lead form-control" name="mobile-number" id="mobile-number"/>
                                 </div>
                             </div>
 
