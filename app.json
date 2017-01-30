@@ -13,13 +13,10 @@
     "MONGODB_URI": {
       "required": true
     },
-    "SPOTIPY_CLIENT_ID": {
+    "SPOTIFY_CLIENT_ID": {
       "required": true
     },
-    "SPOTIPY_CLIENT_SECRET": {
-      "required": true
-    },
-    "SPOTIPY_REDIRECT_URI": {
+    "SPOTIFY_CLIENT_SECRET": {
       "required": true
     },
     "DWUNIQUE_REFRESH_TOKEN": {
@@ -34,7 +31,7 @@
     "TWILIO_NUMBER": {
       "required": true
     },
-    "APP_URL": {
+    "HEROKU_APP_NAME": {
       "required": true
     },
     "SECRET_KEY": {

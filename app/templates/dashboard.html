@@ -1,0 +1,85 @@
+{# app/templates/dashboard.html
+ #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/static/css/dashboard.css"/>
+
+    <!-- JS -->
+    <script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous" defer></script>
+    <script src="/static/js/dashboard.js" defer></script>
+
+    <!-- Page -->
+    <title>DWUnique - Dashboard</title>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">DWUnique Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-sm-4 col-md-3 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="content-li active" data-sidebar-name="dwu" onclick="switch_content(this);"><a href="#">DWUnique</a></li>
+                    <li class="content-li" data-sidebar-name="dwh" onclick="switch_content(this);"><a href="#">DW History</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="https://open.spotify.com/user/spotify/playlist/{{dw}}">Source DW</a></li>
+                    <li class="content-li" data-sidebar-name="settings" onclick="switch_content(this);"><a href="#">Settings</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="dwu">
+                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwu}}">DWUnique</a></h1>
+                <div class="playlist-container">
+                    <iframe src="https://embed.spotify.com/?uri=spotify:user:dwunique:playlist:{{dwu}}" frameborder="0" allowtransparency="true"></iframe>
+                </div>
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="dwh">
+                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwh}}">DW History</a></h1>
+                <div class="playlist-container">
+                    <iframe src="https://embed.spotify.com/?uri=spotify:user:dwunique:playlist:{{dwh}}" frameborder="0" allowtransparency="true"></iframe>
+                </div>
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="settings">
+                <h1 class="page-header">Settings</h1>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="mobile-number">Mobile number</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">+1</div>
+                            <input type="text" name="mobile-number" class="form-control" id="mobile-number" value="{{mobile_number}}" placeholder="234 567 8910">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile updates</label>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="mobile-update-setting" {{'checked' if mobile_update_setting else ''}}> Send updates to my mobile phone
+                            </label>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Update">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
