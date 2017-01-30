@@ -43,7 +43,7 @@ def parse_playlist_resource(resource):
 USER_AUTH_PARAMS = {
     'response_type': 'code',
     'redirect_uri': SPOTIFY_REDIRECT_URI,
-    'scope': 'user-read-email',
+    'scope': 'user-read-email user-follow-modify playlist-modify-public playlist-modify-private',
     'state': 'user-auth',
     'client_id': SPOTIFY_CLIENT_ID
 }
