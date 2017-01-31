@@ -7,3 +7,10 @@ You know that feeling when you're listening through your Discover Weekly Monday 
 1. You sign in to Spotify
 2. Every Monday, we update your DWUnique
 3. You listen to only the new songs from your Discover Weekly
+
+### TODO
+- Set up WTForms
+- Beautify dashboard frontend
+- Add Playlist renaming and other settings
+- Order DW History newest to oldest?
+- Implement email updates?

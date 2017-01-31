@@ -27,7 +27,7 @@ if date.today().weekday() == 0:
     for user_id in user_ids:
         pm = PlaylistManager(user_id)
         updated = pm.update()
-        if updated and pm.getMobileNumber() is not None:
+        if updated and pm.getmobileUpdateSetting() and pm.getMobileNumber() is not None:
             message = 'Your DWUnique has been updated!'
             message += f'\nCheck it out at https://play.spotify.com/user/dwunique/playlist/{pm.dwuId}'
             client.messages.create(to=pm.getMobileNumber(), from_=TWILIO_NUMBER, body=message)
