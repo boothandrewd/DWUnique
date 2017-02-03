@@ -134,7 +134,10 @@ def spotify_auth_callback():
 def connect():
     # Sign in if not signed in
     if 'user_id' not in session:
-        return redirect('/signin')
+        return redirect('/')
+
+    if users.find_one({'user_id': session['user_id']}) is None:
+        return redirect('/')
 
     if request.method == 'POST':
         # Get submitted playlist id
@@ -169,7 +172,10 @@ def connect():
 def playlists():
     # Sign in if not signed in
     if 'user_id' not in session:
-        return redirect('/signin')
+        return redirect('/')
+
+    if users.find_one({'user_id': session['user_id']}) is None:
+        return redirect('/')
 
     pm = PlaylistManager(session['user_id'])
 

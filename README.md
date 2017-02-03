@@ -10,10 +10,15 @@ You know that feeling when you're listening through your Discover Weekly Monday 
 
 ### TODO
 - Set up WTForms
-- Beautify dashboard frontend
+- ~~Beautify dashboard frontend~~
 - Add Playlist renaming, playlist image changing, etc...
 - Week ordering/separation of DW History
-- Credits in settings
+- ~~Credits in settings~~
 - Option to copy playlist to user account
 - Order DW History newest to oldest?
 - Implement email updates?
+
+###### Credits
+[Andrew Booth](http://andrewdbooth.me): Production, design, and implementation
+
+&copy; 2017 Andrew Booth
