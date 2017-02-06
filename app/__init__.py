@@ -134,10 +134,10 @@ def spotify_auth_callback():
 def connect():
     # Sign in if not signed in
     if 'user_id' not in session:
-        return redirect('/')
+        return redirect('/signin')
 
     if users.find_one({'user_id': session['user_id']}) is None:
-        return redirect('/')
+        return redirect('/signin')
 
     if request.method == 'POST':
         # Get submitted playlist id
@@ -172,10 +172,10 @@ def connect():
 def playlists():
     # Sign in if not signed in
     if 'user_id' not in session:
-        return redirect('/')
+        return redirect('/signin')
 
     if users.find_one({'user_id': session['user_id']}) is None:
-        return redirect('/')
+        return redirect('/signin')
 
     pm = PlaylistManager(session['user_id'])
 
@@ -183,7 +183,6 @@ def playlists():
         pm.setMobileNumber(re.sub(r'\D', '', request.form['mobile-number']))
         setting = 'mobile-update-setting' in request.form
         pm.setmobileUpdateSetting(setting)
-
 
     # Get user data, redirect to connect if no DW connected
     user_record = users.find_one({'user_id': session['user_id']})
