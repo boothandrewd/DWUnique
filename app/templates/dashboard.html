@@ -28,7 +28,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">DWUnique Dashboard</a>
+                <a class="navbar-brand" href="/dashboard">DWUnique Dashboard</a>
             </div>
         </div>
     </nav>
@@ -39,24 +39,25 @@
 
             <div class="col-sm-4 col-md-3 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li class="content-li active" data-sidebar-name="dwu" onclick="switch_content(this);"><a href="#">DWUnique</a></li>
+                    <li class="content-li active" data-sidebar-name="dwu" onclick="switch_content(this);"><a href="#">This Week's DWUnique</a></li>
                     <li class="content-li" data-sidebar-name="dwh" onclick="switch_content(this);"><a href="#">DW History</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li><a href="https://open.spotify.com/user/spotify/playlist/{{dw}}">Source DW</a></li>
+                    <li><a href="https://open.spotify.com/user/spotify/playlist/{{dw}}">Source DW <span class="glyphicon glyphicon-new-window"></span></a></li>
                     <li class="content-li" data-sidebar-name="settings" onclick="switch_content(this);"><a href="#">Settings</a></li>
+                    <li class="content-li" data-sidebar-name="credits" onclick="switch_content(this);"><a href="#">Credits</a></li>
                 </ul>
             </div>
 
             <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="dwu">
-                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwu}}">DWUnique</a></h1>
+                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwu}}">DWUnique <span class="glyphicon glyphicon-new-window"></span></a></h1>
                 <div class="playlist-container">
                     <iframe src="https://embed.spotify.com/?uri=spotify:user:dwunique:playlist:{{dwu}}" frameborder="0" allowtransparency="true"></iframe>
                 </div>
             </div>
 
             <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="dwh">
-                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwh}}">DW History</a></h1>
+                <h1 class="page-header"><a href="https://open.spotify.com/user/dwunique/playlist/{{dwh}}">DW History <span class="glyphicon glyphicon-new-window"></span></a></h1>
                 <div class="playlist-container">
                     <iframe src="https://embed.spotify.com/?uri=spotify:user:dwunique:playlist:{{dwh}}" frameborder="0" allowtransparency="true"></iframe>
                 </div>
@@ -72,6 +73,7 @@
                             <input type="text" name="mobile-number" class="form-control" id="mobile-number" value="{{mobile_number}}">
                         </div>
                     </div>
+                    <br>
                     <div class="form-group">
                         <label>Mobile updates</label>
                         <div class="checkbox">
@@ -80,8 +82,23 @@
                             </label>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Update">
+                    <br>
+                    <input type="submit" class="btn btn-default" value="Update">
                 </form>
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main content-div" id="credits">
+                <h1>Credits</h1>
+                <h4>Owner: <a href="http://andrewdbooth.me">Andrew Booth <span class="glyphicon glyphicon-new-window"></span></a></h4>
+                <h4>Designer: <a href="http://andrewdbooth.me">Andrew Booth <span class="glyphicon glyphicon-new-window"></span></a></h4>
+                <h4>Engineer: <a href="http://andrewdbooth.me">Andrew Booth <span class="glyphicon glyphicon-new-window"></span></a></h4>
+                <br>
+                <h4>Check DWUnique out on <a href="https://github.com/boothandrewd/DWUnique">GitHub <span class="glyphicon glyphicon-new-window"></span></a></h4>
+                <br>
+                <h4>Also, check out the good <a href="https://open.spotify.com/user/1133808441/playlist/7lKTZyRvCEvajGZ4K5omPn">music <span class="glyphicon glyphicon-new-window"></span></a> I listen to.</h4>
+                <br>
+                <br>
+                <p>&copy; 2017 Andrew Booth</p>
             </div>
         </div>
     </div>
